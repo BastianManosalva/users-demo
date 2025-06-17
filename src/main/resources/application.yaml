@@ -1,0 +1,15 @@
+app:
+  regularExpression:
+    password: ^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9\\s]).{5,}
+    email: ^[a-z0-9]+@[a-z]+\.[a-z]{2,3}$
+
+spring:
+    mvc:
+      pathmatch:
+            matching-strategy: ant-path-matcher
+
+swagger:
+  docs:
+    title: Users Microservice
+    description:  Users Microservice
+    version: 1.0.0
