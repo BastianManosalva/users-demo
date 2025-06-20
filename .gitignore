@@ -35,3 +35,9 @@ build/
 .history/
 
 target/
+
+
+### Archivos bdd h2 ###
+/data/
+*.mv.db
+*.h2.db
