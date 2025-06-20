@@ -1,0 +1,754 @@
+{
+	"info": {
+		"_postman_id": "71c5b902-813d-475a-800b-916feea49d2f",
+		"name": "Demo App Usuarios",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "42594667"
+	},
+	"item": [
+		{
+			"name": "Ingresar Usuario",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "algo",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Diego\",\r\n\t\"email\": \"diegasdddo@gmail.cl\",\r\n\t\"password\": \"D4b#dd\",\r\n\t\"phones\": [\r\n        {\r\n            \"number\": \"957423588\",\r\n            \"cityCode\": \"022\",\r\n            \"countryCode\": \"56\"\r\n        },\r\n        {\r\n            \"number\": \"985423584\",\r\n            \"cityCode\": \"022\",\r\n            \"countryCode\": \"56\"\r\n        },\r\n        {\r\n            \"number\": \"954236878\",\r\n            \"cityCode\": \"022\",\r\n            \"countryCode\": \"56\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8001/v1/users/create"
+			},
+			"response": [
+				{
+					"name": "bastian eliminar",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "algo",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"bastian\",\r\n\t\"email\": \"bastian@email.cl\",\r\n\t\"password\": \"B@st1\",\r\n\t\"phones\": [\r\n        {\r\n            \"number\": \"111\",\r\n            \"cityCode\": \"022\",\r\n            \"countryCode\": \"56\"\r\n        },\r\n        {\r\n            \"number\": \"222\",\r\n            \"cityCode\": \"022\",\r\n            \"countryCode\": \"56\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8001/v1/users/create"
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 20 Jun 2025 21:36:55 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"2ddf4dcb-5528-4541-a124-cf67c197ee0c\",\n    \"created\": \"2025-06-20T21:36:55.490+00:00\",\n    \"modified\": \"2025-06-20T21:36:55.490+00:00\",\n    \"lastLogin\": \"2025-06-20T21:36:55.490+00:00\",\n    \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiYXN0aWFuQGVtYWlsLmNsIiwiaWF0IjoxNzUwNDU1NDE1LCJleHAiOjE3NTA0NTU3MTV9.7k_riwGaG_53sA5gu6wLiTJ_gF-fcR6CExmev9kB2Kk\",\n    \"isActive\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "Buscar Usuario",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "token"
+					}
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "algo",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8001/v1/users/a47f58b2-6b16-457f-a632-09bb87fe1c48"
+			},
+			"response": [
+				{
+					"name": "Buscar Usuario",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWltZUBnbWFpbC5jbCIsImlhdCI6MTc1MDI4MTMyMiwiZXhwIjoxNzUwMzY3NzIyfQ.2fZ2Lfc2D0fEXTYS3Vq8NprCN5eyvoddaV3DQUKXtTM",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8001/v1/users/7a2a3592-c462-41e0-9b90-8dd2a7b52b00d"
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 20 Jun 2025 21:23:04 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 404,\n    \"message\": \"The user does not exist.\"\n}"
+				},
+				{
+					"name": "Buscar Usuario",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWltZUBnbWFpbC5jbCIsImlhdCI6MTc1MDI4MTMyMiwiZXhwIjoxNzUwMzY3NzIyfQ.2fZ2Lfc2D0fEXTYS3Vq8NprCN5eyvoddaV3DQUKXtTM",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8001/v1/users/7a2a3592-c462-41e0-9b90-8dd2a7b52b00"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 20 Jun 2025 21:24:17 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"7a2a3592-c462-41e0-9b90-8dd2a7b52b00\",\n    \"name\": \"david\",\n    \"email\": \"david@email.cl\",\n    \"password\": \"$2a$10$0XwzKMzGSL1G6ADy1LySXOdbfH424eX1zpNc8rsO82Mc3cVMu5EqC\",\n    \"phones\": [\n        {\n            \"number\": \"111\",\n            \"cityCode\": \"022\",\n            \"countryCode\": \"56\"\n        },\n        {\n            \"number\": \"222\",\n            \"cityCode\": \"022\",\n            \"countryCode\": \"56\"\n        },\n        {\n            \"number\": \"333\",\n            \"cityCode\": \"022\",\n            \"countryCode\": \"56\"\n        }\n    ],\n    \"isActive\": true,\n    \"createdAt\": \"2025-06-20T21:19:24.171+00:00\",\n    \"modified\": \"2025-06-20T21:19:24.171+00:00\",\n    \"lastLogin\": \"2025-06-20T21:19:24.171+00:00\",\n    \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYXZpZEBlbWFpbC5jbCIsImlhdCI6MTc1MDQ1NDM2NCwiZXhwIjoxNzUwNDU0NjY0fQ.hUCi9wxRgn9cxDRes8JmEnh-f6iNon0BBLkP9sF-KPg\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Modificar Usuario",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "token"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"andres\",\r\n\t\"email\": \"andres@gmail.com\",\r\n\t\"password\": \"D4b#dd\",\r\n\t\"phones\": [\r\n        {\r\n            \"number\": \"957429654\",\r\n            \"cityCode\": \"022\",\r\n            \"countryCode\": \"56\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8001/v1/users/55933cc6-8ad4-4462-ba47-99720438e5f3"
+			},
+			"response": [
+				{
+					"name": "Modificar Usuario",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"david andres\",\r\n\t\"email\": \"davidandres@email.cl\",\r\n\t\"password\": \"D4b#dd\",\r\n\t\"phones\": [\r\n        {\r\n            \"number\": \"957429654\",\r\n            \"cityCode\": \"022\",\r\n            \"countryCode\": \"56\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8001/v1/users/7a2a3592-c462-41e0-9b90-8dd2a7b52b00"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Set-Cookie",
+							"value": "JSESSIONID=9695400A69935F0A05A3A95773BD9287; Path=/; HttpOnly"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 20 Jun 2025 21:32:43 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"User updated successfully.\",\n    \"id\": \"7a2a3592-c462-41e0-9b90-8dd2a7b52b00\",\n    \"created\": \"2025-06-20T21:19:24.171+00:00\",\n    \"modified\": \"2025-06-20T21:32:43.560+00:00\",\n    \"lastLogin\": \"2025-06-20T21:32:26.990+00:00\",\n    \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYXZpZEBlbWFpbC5jbCIsImlhdCI6MTc1MDQ1NDM2NCwiZXhwIjoxNzUwNDU0NjY0fQ.hUCi9wxRgn9cxDRes8JmEnh-f6iNon0BBLkP9sF-KPg\",\n    \"isActive\": true,\n    \"phones\": [\n        {\n            \"number\": \"957429654\",\n            \"cityCode\": \"022\",\n            \"countryCode\": \"56\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Cambio Estatus",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYXZpZEBlbWFpbC5jbCIsImlhdCI6MTc1MDQ1NTE0NiwiZXhwIjoxNzUwNDU1NDQ2fQ.wC5f1uznOk3sWK6RqisoaKcicciuLaQjL9oPWp8-8Mw"
+					}
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"active\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8001/v1/users/7a2a3592-c462-41e0-9b90-8dd2a7b52b00/change-status"
+			},
+			"response": [
+				{
+					"name": "already active",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"active\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8001/v1/users/7a2a3592-c462-41e0-9b90-8dd2a7b52b00/change-status"
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 20 Jun 2025 21:35:38 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 400,\n    \"message\": \"User is already active.\"\n}"
+				},
+				{
+					"name": "false",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"active\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8001/v1/users/7a2a3592-c462-41e0-9b90-8dd2a7b52b00/change-status"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 20 Jun 2025 21:36:00 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"7a2a3592-c462-41e0-9b90-8dd2a7b52b00\",\n    \"active\": false\n}"
+				}
+			]
+		},
+		{
+			"name": "Listar Usuarios",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "token"
+					}
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "algo",
+						"type": "default",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8001/v1/users"
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar Usuario",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "token"
+					}
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"andres\",\r\n\t\"email\": \"andres@gmail.com\",\r\n\t\"password\": \"D4b#dd\",\r\n\t\"phones\": [\r\n        {\r\n            \"number\": \"957429654\",\r\n            \"cityCode\": \"022\",\r\n            \"countryCode\": \"56\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8001/v1/users/55933cc6-8ad4-4462-ba47-99720438e5f3"
+			},
+			"response": [
+				{
+					"name": "bastian eliminado",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8001/v1/users/2ddf4dcb-5528-4541-a124-cf67c197ee0c"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 20 Jun 2025 21:38:21 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"2ddf4dcb-5528-4541-a124-cf67c197ee0c\",\n    \"name\": \"bastian\",\n    \"deletionDate\": \"2025-06-20T21:38:21.827+00:00\",\n    \"message\": \"User deleted successfully.\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"email\": \"jaime@gmail.cl\",\r\n\t\"password\": \"D4b#dd\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8001/v1/auth/login"
+			},
+			"response": [
+				{
+					"name": "login",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"email\": \"david@email.cl\",\r\n\t\"password\": \"D@v1d\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8001/v1/auth/login"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 20 Jun 2025 21:26:20 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"7a2a3592-c462-41e0-9b90-8dd2a7b52b00\",\n    \"lastLogin\": \"2025-06-20T21:26:20.145+00:00\",\n    \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYXZpZEBlbWFpbC5jbCIsImlhdCI6MTc1MDQ1NDc4MCwiZXhwIjoxNzUwNDU1MDgwfQ.ZaQ0-xPoZt153i-uFzUxVbbKHY_TNZzbPHvR-_Jxt_M\",\n    \"active\": true\n}"
+				}
+			]
+		}
+	]
+}
