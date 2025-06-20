@@ -2,33 +2,44 @@ package com.example.usersdemo.utils;
 
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import io.jsonwebtoken.*;
 
+@Component
 public class JwtUtil {
 
-    private static final String SECRET_KEY = "your-secret-key";
+    private final JwtConfig jwtConfig;
 
-    public static String generateToken(String email) {
+    @Autowired
+    public JwtUtil(JwtConfig jwtConfig) {
+        this.jwtConfig = jwtConfig;
+    }
+
+    // private static final String SECRET_KEY = "your-secret-key";
+
+    public String generateToken(String email) {
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 300000)) // 5 minutes expiration
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .setExpiration(new Date(System.currentTimeMillis() + 300000))
+                .signWith(SignatureAlgorithm.HS256, jwtConfig.getSecret())
                 .compact();
     }
 
-    public static boolean validateToken(String token) {
+    public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(jwtConfig.getSecret()).parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
     }
 
-    public static String getEmailFromToken(String token) {
+    public String getEmailFromToken(String token) {
         return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
+                .setSigningKey(jwtConfig.getSecret())
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();

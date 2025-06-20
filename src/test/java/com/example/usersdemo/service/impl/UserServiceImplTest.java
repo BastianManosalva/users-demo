@@ -27,10 +27,14 @@ import com.example.usersdemo.exception.ServiceException;
 import com.example.usersdemo.models.entity.User;
 import com.example.usersdemo.models.repository.UserRepository;
 import com.example.usersdemo.request.user.ChangeUserStatusRequest;
+import com.example.usersdemo.request.user.UpdateUserRequest;
 import com.example.usersdemo.request.user.UserRequest;
 import com.example.usersdemo.response.user.ChangeUserStatusResponse;
 import com.example.usersdemo.response.user.DeleteUserResponse;
 import com.example.usersdemo.response.user.RegisterUserResponse;
+import com.example.usersdemo.response.user.UpdateUserResponse;
+import com.example.usersdemo.utils.JwtUtil;
+import com.example.usersdemo.utils.MessageUtils;
 import com.example.usersdemo.utils.Utils;
 
 public class UserServiceImplTest {
@@ -38,6 +42,7 @@ public class UserServiceImplTest {
     private UserRepository userRepo;
     private Utils utils;
     private PasswordEncoder passwordEncoder;
+    private JwtUtil jwtUtil;
     private UserServiceImpl userService;
 
     @BeforeEach
@@ -45,10 +50,9 @@ public class UserServiceImplTest {
         userRepo = mock(UserRepository.class);
         utils = mock(Utils.class);
         passwordEncoder = mock(PasswordEncoder.class);
+        jwtUtil = mock(JwtUtil.class);
 
-        userService = new UserServiceImpl(utils);
-        userService.userRepo = userRepo;
-        userService.passwordEncoder = passwordEncoder;
+        userService = new UserServiceImpl(utils, userRepo, passwordEncoder, jwtUtil);
 
         String email = "test@gmail.cl";
         SecurityContextHolder.getContext().setAuthentication(
@@ -108,6 +112,64 @@ public class UserServiceImplTest {
         assertNotNull(result);
         assertNotNull(result.getId());
         assertTrue(result.getIsActive());
+    }
+
+    @Test
+    void updateUser_infoUpdated() {
+        String userId = "123";
+        User user = new User();
+        user.setId(userId);
+        user.setEmail("test@gmail.cl");
+        user.setName("old name");
+        user.setPassword("oldpass");
+        user.setPhones(new ArrayList<>());
+        user.setCreatedAt(new Date());
+        user.setModified(new Date());
+        user.setLastLogin(new Date());
+        user.setToken("token");
+        user.setIsActive(true);
+
+        UpdateUserRequest request = new UpdateUserRequest();
+        request.setEmail("test@gmail.cl");
+        request.setName("new name");
+        request.setPassword("newpass");
+        request.setPhones(new ArrayList<>());
+
+        when(userRepo.findById(userId)).thenReturn(Optional.of(user));
+        when(userRepo.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(passwordEncoder.encode("newpass")).thenReturn("hashedNewPass");
+
+        UpdateUserResponse response = userService.updateUser(userId, request);
+
+        assertNotNull(response);
+        assertEquals(userId, response.getId());
+        assertEquals("new name", user.getName());
+        assertEquals("test@gmail.cl", user.getEmail());
+        assertEquals("hashedNewPass", user.getPassword());
+        assertEquals(MessageUtils.UPDATE_USER_MESSAGE, response.getMessage());
+        verify(userRepo, times(1)).save(user);
+    }
+
+    @Test
+    void changeUserStatus_activateUser_OK() {
+        String userId = "1";
+        User user = new User();
+        user.setId(userId);
+        user.setEmail("test@gmail.cl");
+        user.setIsActive(false);
+
+        when(userRepo.findById(userId)).thenReturn(Optional.of(user));
+        when(userRepo.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        ChangeUserStatusRequest request = new ChangeUserStatusRequest();
+        request.setActive(true);
+
+        ChangeUserStatusResponse response = userService.changeUserStatus(userId, request);
+
+        assertNotNull(response);
+        assertEquals(userId, response.getId());
+        assertTrue(response.isActive());
+        verify(userRepo, times(1)).save(user);
     }
 
     @Test

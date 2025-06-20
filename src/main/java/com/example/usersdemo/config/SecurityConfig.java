@@ -10,6 +10,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.usersdemo.security.JwtFilter;
+import com.example.usersdemo.utils.JwtUtil;
 
 @Configuration
 @EnableWebSecurity
@@ -21,8 +22,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JwtFilter jwtFilter() {
-        return new JwtFilter();
+    public JwtFilter jwtFilter(JwtUtil jwtUtil) {
+        return new JwtFilter(jwtUtil);
     }
 
     @Bean

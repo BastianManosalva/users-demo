@@ -47,29 +47,14 @@ public class UserController {
      * @return {@link ResponseEntity}
      * @throws ServiceException
      */
-    @ApiOperation("Endpoint para crear usuarios.")
+    @ApiOperation("Endpoint to create a user account.")
     @PostMapping("/create")
     public ResponseEntity<RegisterUserResponse> createUser(
             @Valid @RequestBody UserRequest request) throws ServiceException {
-        LOGGER.info("Initiating service.");
+        LOGGER.info("Initiating request to create account with email: {}.", request.getEmail());
         final RegisterUserResponse response = service.createUser(request);
-        LOGGER.info("End of user service POST.");
+        LOGGER.info("User account created successfully with email: {}.", request.getEmail());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
-
-    /**
-     * 
-     * @param token {@link String}
-     * @return {@link ResponseEntity}
-     */
-    @ApiOperation("Endpoint para listar usuarios.")
-    @GetMapping("/list")
-    public ResponseEntity<List<User>> listUsers() throws ServiceException {
-        LOGGER.info("Initiating service.");
-
-        final List<User> userList = service.findAllUsers();
-        LOGGER.info("End of user list service GET.");
-        return ResponseEntity.status(HttpStatus.OK).body(userList);
     }
 
     /**
@@ -79,13 +64,13 @@ public class UserController {
      * @return {@link ResponseEntity}
      * @throws ServiceException
      */
-    @ApiOperation("Endpoint para buscar usuario.")
+    @ApiOperation("Endpoint to find a user by ID.")
     @GetMapping("/{user-id}")
     public ResponseEntity<User> findUser(
             @PathVariable(value = "user-id", required = true) String id) throws ServiceException {
-        LOGGER.info("Initiating service.");
+        LOGGER.info("Initiating request to find user with id: {}.", id);
         final User user = service.findUser(id);
-        LOGGER.info("End of find user service GET.");
+        LOGGER.info("User found successfully with id: {}.", id);
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
@@ -96,14 +81,14 @@ public class UserController {
      * @return {@link ResponseEntity}
      * @throws ServiceException
      */
-    @ApiOperation("Endpoint para modificar usuario.")
+    @ApiOperation("Endpoint to update a user.")
     @PutMapping("/{user-id}")
     public ResponseEntity<UpdateUserResponse> updateUser(
             @PathVariable(value = "user-id", required = true) String id,
             @RequestBody UpdateUserRequest request) throws ServiceException {
-        LOGGER.info("Initiating service.");
+        LOGGER.info("Initiating request to update user with id: {}.", id);
         final UpdateUserResponse response = service.updateUser(id, request);
-        LOGGER.info("End of update user service PUT.");
+        LOGGER.info("User with id {} updated successfully.", id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -114,13 +99,14 @@ public class UserController {
      * @return {@link ResponseEntity}
      * @throws ServiceException
      */
-    @ApiOperation("Endpoint para activar/desactivar usuario.")
-    @PatchMapping("/{user-id}/activate")
-    public ResponseEntity<ChangeUserStatusResponse> activateUser(
+    @ApiOperation("Endpoint change a user status.")
+    @PatchMapping("/{user-id}/change-status")
+    public ResponseEntity<ChangeUserStatusResponse> changeUserStatus(
             @PathVariable(value = "user-id", required = true) String id,
             @RequestBody ChangeUserStatusRequest request) throws ServiceException {
-        LOGGER.info("Initiating service to activate/deactivate user.");
+        LOGGER.info("Initiating request to change user: {} status.", id);
         final ChangeUserStatusResponse response = service.changeUserStatus(id, request);
+        LOGGER.info("User status changed successfully for user with id: {}.", id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -130,13 +116,26 @@ public class UserController {
      * @return {@link ResponseEntity}
      * @throws ServiceException
      */
-    @ApiOperation("Endpoint para eliminar usuario.")
+    @ApiOperation("Endpoint to delete a user.")
     @DeleteMapping("/{user-id}")
     public ResponseEntity<DeleteUserResponse> deleteUser(
             @PathVariable(value = "user-id", required = true) String id) throws ServiceException {
-        LOGGER.info("Initiating service delete user.");
+        LOGGER.info("Initiating request to delete user with id: {}.", id);
         final DeleteUserResponse response = service.deleteUser(id);
+        LOGGER.info("User with id {} deleted successfully.", id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    /**
+     * 
+     * @param token {@link String}
+     * @return {@link ResponseEntity}
+     */
+    @ApiOperation("Utility endpoint to list all users.")
+    @GetMapping("/list")
+    public ResponseEntity<List<User>> listUsers() throws ServiceException {
+        final List<User> userList = service.findAllUsers();
+        return ResponseEntity.status(HttpStatus.OK).body(userList);
     }
 
 }

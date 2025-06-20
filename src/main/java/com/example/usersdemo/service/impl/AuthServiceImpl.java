@@ -16,14 +16,15 @@ import com.example.usersdemo.service.AuthService;
 import com.example.usersdemo.utils.JwtUtil;
 import com.example.usersdemo.utils.MessageUtils;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    @Autowired
-    UserRepository userRepo;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final UserRepository userRepo;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     @Override
     public LoginResponse login(LoginRequest request) {
@@ -41,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
             throw new ServiceException(String.valueOf(HttpStatus.FORBIDDEN.value()), MessageUtils.USER_INACTIVE);
         }
 
-        String token = JwtUtil.generateToken(user.getEmail());
+        String token = jwtUtil.generateToken(user.getEmail());
         Date now = new Date();
         user.setLastLogin(now);
         userRepo.save(user);

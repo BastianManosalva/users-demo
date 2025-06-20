@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,12 +35,9 @@ public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private final Utils utils;
-
-    @Autowired
-    UserRepository userRepo;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final UserRepository userRepo;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     @Override
     public User findUser(String id) {
@@ -52,9 +48,11 @@ public class UserServiceImpl implements UserService {
                 String.valueOf(HttpStatus.NOT_FOUND.value()), MessageUtils.USER_DOES_NOT_EXIST));
 
         if (!user.getEmail().equals(emailFromJwt)) {
+            LOGGER.warn("Unauthorized access attempt for user id: {} by email: {}", id, emailFromJwt);
             throw new ServiceException(String.valueOf(HttpStatus.UNAUTHORIZED.value()),
                     MessageUtils.UNAUTHORIZED_STATUS);
         }
+
         return user;
     }
 
@@ -64,10 +62,7 @@ public class UserServiceImpl implements UserService {
 
         utils.emailValidator(request.getEmail());
         utils.passwordValidator(request.getPassword());
-
-        if (userRepo.existsByEmail(request.getEmail())) {
-            throw new ServiceException(String.valueOf(HttpStatus.CONFLICT.value()), MessageUtils.EXISTING_EMAIL);
-        }
+        utils.existingEmailValidator(request.getEmail());
 
         Date date = new Date();
 
@@ -81,7 +76,7 @@ public class UserServiceImpl implements UserService {
         user.setModified(date);
         user.setLastLogin(date);
         user.setPhones(request.getPhones());
-        user.setToken(JwtUtil.generateToken(user.getEmail()));
+        user.setToken(jwtUtil.generateToken(user.getEmail()));
 
         final var createdUser = userRepo.save(user);
 
@@ -101,37 +96,24 @@ public class UserServiceImpl implements UserService {
 
         final var user = findUser(id);
 
-        // Se valida estructura de email y password ingresados.
         utils.emailValidator(request.getEmail());
         utils.passwordValidator(request.getPassword());
-        LOGGER.info("Formatos de email y password validos.");
+        utils.existingEmailValidator(request.getEmail());
 
-        Date date = new Date();
-        LOGGER.info("Date: {}", date);
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setPhones(request.getPhones());
+        user.setModified(new Date());
 
-        // Se arma Entity para actualizar.
-        final var userUpdate = new User();
-        userUpdate.setId(user.getId());
-        userUpdate.setName(request.getName());
-        userUpdate.setEmail(request.getEmail());
-        userUpdate.setPassword(request.getPassword());
-        userUpdate.setPhones(request.getPhones());
-        userUpdate.setCreatedAt(user.getCreatedAt());// Mantiene fecha de creación.
-        userUpdate.setModified(date);
-        userUpdate.setLastLogin(user.getCreatedAt());// Mantiene fecha de ultimo login.
-        userUpdate.setIsActive(user.getIsActive());// Mantiene estado.
-        userUpdate.setToken(user.getToken());// Mantiene token.
+        final var update = userRepo.save(user);
 
-        // Se actualiza el usuario
-        final var update = userRepo.save(userUpdate);
-
-        // Mapeo resultado
         final var updateUser = new UpdateUserResponse();
         updateUser.setId(update.getId());
         updateUser.setCreated(update.getCreatedAt());
         updateUser.setModified(update.getModified());
         updateUser.setLastLogin(update.getLastLogin());
-        // updateUser.setToken(update);
+        updateUser.setToken(update.getToken());
         updateUser.setIsActive(update.getIsActive());
         updateUser.setPhones(update.getPhones());
         updateUser.setMessage(MessageUtils.UPDATE_USER_MESSAGE);

@@ -14,6 +14,7 @@ import com.example.usersdemo.exception.ServiceException;
 import com.example.usersdemo.models.entity.User;
 import com.example.usersdemo.models.repository.UserRepository;
 import com.example.usersdemo.request.auth.LoginRequest;
+import com.example.usersdemo.utils.JwtUtil;
 import com.example.usersdemo.utils.MessageUtils;
 
 public class AuthServiceImplTest {
@@ -21,15 +22,15 @@ public class AuthServiceImplTest {
     private UserRepository userRepo;
     private PasswordEncoder passwordEncoder;
     private AuthServiceImpl authService;
+    private JwtUtil jwtUtil;
 
     @BeforeEach
     void setUp() {
         userRepo = mock(UserRepository.class);
         passwordEncoder = mock(PasswordEncoder.class);
+        jwtUtil = mock(JwtUtil.class);
 
-        authService = new AuthServiceImpl();
-        authService.userRepo = userRepo;
-        authService.passwordEncoder = passwordEncoder;
+        authService = new AuthServiceImpl(userRepo, passwordEncoder, jwtUtil);
     }
 
     @Test

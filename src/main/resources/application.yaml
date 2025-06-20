@@ -22,6 +22,9 @@ spring:
       console:
         enabled: true
 
+jwt:
+  secret: superSecretKey
+
 swagger:
   docs:
     title: Users Microservice
