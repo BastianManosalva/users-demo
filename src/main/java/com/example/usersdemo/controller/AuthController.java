@@ -25,7 +25,7 @@ public class AuthController {
     @Autowired
     AuthService authService;
 
-    @ApiOperation("Endpoint hacer login.")
+    @ApiOperation("Endpoint to login.")
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         LOGGER.info("Initiating login service.");

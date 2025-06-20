@@ -103,7 +103,8 @@ public class UserServiceImpl implements UserService {
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setPhones(request.getPhones());
+        user.getPhones().clear();
+        user.getPhones().addAll(request.getPhones());
         user.setModified(new Date());
 
         final var update = userRepo.save(user);
