@@ -23,6 +23,12 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     private HandlerExceptionResolver handlerExceptionResolver;
 
+    private final JwtUtil jwtUtil;
+
+    public JwtFilter(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -52,7 +58,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }
 
             String token = authHeader.substring(7);
-            boolean valid = JwtUtil.validateToken(token);
+            boolean valid = jwtUtil.validateToken(token);
 
             if (!valid) {
 
@@ -62,7 +68,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 return;
             }
 
-            String email = JwtUtil.getEmailFromToken(token);
+            String email = jwtUtil.getEmailFromToken(token);
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(email, null,
                     Collections.emptyList());
             SecurityContextHolder.getContext().setAuthentication(authentication);
