@@ -17,7 +17,7 @@ import com.example.usersdemo.service.AuthService;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("/v1/auth")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);

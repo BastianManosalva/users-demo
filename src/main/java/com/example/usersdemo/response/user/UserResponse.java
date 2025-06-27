@@ -15,15 +15,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateUserResponse extends RepresentationModel<UpdateUserResponse> {
+public class UserResponse extends RepresentationModel<UserResponse> {
 
-    private String message;
     private UUID id;
-    private Date created;
+    private String name;
+    private String email;
+    private List<PhoneResponse> phones;
+    private boolean isActive;
+    private Date createdAt;
     private Date modified;
     private Date lastLogin;
     private String token;
-    private Boolean isActive;
-    private List<PhoneResponse> phones;
 
 }

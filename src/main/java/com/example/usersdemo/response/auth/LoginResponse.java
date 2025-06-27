@@ -1,6 +1,7 @@
 package com.example.usersdemo.response.auth;
 
 import java.util.Date;
+import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginResponse {
 
-    private String id;
+    private UUID id;
     private Date lastLogin;
     private String token;
     private boolean isActive;
