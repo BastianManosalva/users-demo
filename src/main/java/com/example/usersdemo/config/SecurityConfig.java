@@ -32,9 +32,15 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .headers(headers -> headers.frameOptions().sameOrigin())
                 .authorizeHttpRequests(auth -> auth
-                        .antMatchers("/h2-console/**", "/v1/users/create", "/v1/auth/login", "/swagger-ui/.html",
-                                "/swagger-ui/**", "/v2/api-docs/**", "/swagger-resources/**", "/webjars/**")
+                        .antMatchers("/h2-console/**",
+                                "/api/v1/auth/login",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v2/api-docs/**",
+                                "/swagger-resources/**",
+                                "/webjars/**")
                         .permitAll()
+                        .antMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/users").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

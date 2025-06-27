@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,8 @@ public class AuthServiceImplTest {
     private AuthServiceImpl authService;
     private JwtUtil jwtUtil;
 
+    private UUID testUuid;
+
     @BeforeEach
     void setUp() {
         userRepo = mock(UserRepository.class);
@@ -31,6 +35,8 @@ public class AuthServiceImplTest {
         jwtUtil = mock(JwtUtil.class);
 
         authService = new AuthServiceImpl(userRepo, passwordEncoder, jwtUtil);
+
+        testUuid = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
     }
 
     @Test
@@ -53,7 +59,7 @@ public class AuthServiceImplTest {
         request.setPassword("bad_password");
 
         User user = new User();
-        user.setId("1");
+        user.setId(testUuid);
         user.setEmail("test@gmail.cl");
         user.setPassword("hashed");
         user.setIsActive(true);
@@ -73,7 +79,7 @@ public class AuthServiceImplTest {
         request.setPassword("password");
 
         User user = new User();
-        user.setId("1");
+        user.setId(testUuid);
         user.setEmail("test@gmail.cl");
         user.setPassword("hashed");
         user.setIsActive(false);
