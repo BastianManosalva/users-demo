@@ -2,16 +2,15 @@ package com.example.usersdemo.service.impl;
 
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.usersdemo.dto.auth.LoginRequestDTO;
+import com.example.usersdemo.dto.auth.LoginResponseDTO;
 import com.example.usersdemo.exception.ServiceException;
 import com.example.usersdemo.models.entity.User;
 import com.example.usersdemo.models.repository.UserRepository;
-import com.example.usersdemo.request.auth.LoginRequest;
-import com.example.usersdemo.response.auth.LoginResponse;
 import com.example.usersdemo.service.AuthService;
 import com.example.usersdemo.utils.JwtUtil;
 import com.example.usersdemo.utils.MessageUtils;
@@ -27,8 +26,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtil jwtUtil;
 
     @Override
-    public LoginResponse login(LoginRequest request) {
-
+    public LoginResponseDTO login(LoginRequestDTO request) {
         User user = userRepo.findByEmail(request.getEmail());
         if (user == null) {
             throw new ServiceException(String.valueOf(HttpStatus.NOT_FOUND.value()), MessageUtils.USER_NOT_FOUND);
@@ -48,7 +46,6 @@ public class AuthServiceImpl implements AuthService {
         user.setToken(token);
         userRepo.save(user);
 
-        return new LoginResponse(user.getId(), now, token, user.getIsActive());
+        return new LoginResponseDTO(user.getId(), now, token, user.getIsActive());
     }
-
 }

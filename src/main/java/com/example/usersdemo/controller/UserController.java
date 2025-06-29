@@ -21,14 +21,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.usersdemo.request.user.ChangeUserStatusRequest;
-import com.example.usersdemo.request.user.UpdateUserRequest;
-import com.example.usersdemo.request.user.UserRequest;
-import com.example.usersdemo.response.user.ChangeUserStatusResponse;
-import com.example.usersdemo.response.user.DeleteUserResponse;
-import com.example.usersdemo.response.user.RegisterUserResponse;
-import com.example.usersdemo.response.user.UpdateUserResponse;
-import com.example.usersdemo.response.user.UserResponse;
+import com.example.usersdemo.dto.user.ChangeUserStatusRequestDTO;
+import com.example.usersdemo.dto.user.ChangeUserStatusResponseDTO;
+import com.example.usersdemo.dto.user.DeleteUserResponseDTO;
+import com.example.usersdemo.dto.user.RegisterUserResponseDTO;
+import com.example.usersdemo.dto.user.UpdateUserRequestDTO;
+import com.example.usersdemo.dto.user.UpdateUserResponseDTO;
+import com.example.usersdemo.dto.user.UserRequestDTO;
+import com.example.usersdemo.dto.user.UserResponseDTO;
 import com.example.usersdemo.service.UserService;
 
 import io.swagger.annotations.ApiOperation;
@@ -55,10 +55,10 @@ public class UserController {
      */
     @ApiOperation("Endpoint to create a new user.")
     @PostMapping
-    public ResponseEntity<RegisterUserResponse> createUser(
-            @Valid @RequestBody UserRequest request) throws ServiceException {
+    public ResponseEntity<RegisterUserResponseDTO> createUser(
+            @Valid @RequestBody UserRequestDTO request) throws ServiceException {
         LOGGER.info("Initiating request to create account with email: {}.", request.getEmail());
-        final RegisterUserResponse response = userService.createUser(request);
+        final RegisterUserResponseDTO response = userService.createUser(request);
 
         String id = response.getId().toString();
         response.add(linkTo(methodOn(UserController.class).updateUser(id, null)).withRel(UPDATE_REL));
@@ -78,9 +78,9 @@ public class UserController {
      */
     @ApiOperation("Endpoint to find a user by ID.")
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> searchUser(@PathVariable String id) throws ServiceException {
+    public ResponseEntity<UserResponseDTO> searchUser(@PathVariable String id) throws ServiceException {
         LOGGER.info("Initiating request to find user with id: {}.", id);
-        final UserResponse response = userService.searchUser(id);
+        final UserResponseDTO response = userService.searchUser(id);
 
         response.add(linkTo(methodOn(UserController.class).searchUser(id)).withSelfRel());
         response.add(linkTo(methodOn(UserController.class).updateUser(id, null)).withRel(UPDATE_REL));
@@ -100,11 +100,11 @@ public class UserController {
      */
     @ApiOperation("Endpoint to update a user.")
     @PutMapping("/{id}")
-    public ResponseEntity<UpdateUserResponse> updateUser(
+    public ResponseEntity<UpdateUserResponseDTO> updateUser(
             @PathVariable String id,
-            @RequestBody UpdateUserRequest request) throws ServiceException {
+            @RequestBody UpdateUserRequestDTO request) throws ServiceException {
         LOGGER.info("Initiating request to update user with id: {}.", id);
-        final UpdateUserResponse response = userService.updateUser(id, request);
+        final UpdateUserResponseDTO response = userService.updateUser(id, request);
 
         response.add(linkTo(methodOn(UserController.class).searchUser(id)).withSelfRel());
         response.add(linkTo(methodOn(UserController.class).deleteUser(id)).withRel(DELETE_REL));
@@ -117,17 +117,17 @@ public class UserController {
     /**
      * 
      * @param id      {@link String}
-     * @param request {@link ChangeUserStatusRequest}
+     * @param request {@link ChangeUserStatusRequestDTO}
      * @return {@link ResponseEntity}
      * @throws ServiceException
      */
     @ApiOperation("Endpoint change a user status.")
     @PatchMapping("/{id}/change-status")
-    public ResponseEntity<ChangeUserStatusResponse> changeUserStatus(
+    public ResponseEntity<ChangeUserStatusResponseDTO> changeUserStatus(
             @PathVariable String id,
-            @RequestBody ChangeUserStatusRequest request) throws ServiceException {
+            @RequestBody ChangeUserStatusRequestDTO request) throws ServiceException {
         LOGGER.info("Initiating request to change user: {} status.", id);
-        final ChangeUserStatusResponse response = userService.changeUserStatus(id, request);
+        final ChangeUserStatusResponseDTO response = userService.changeUserStatus(id, request);
 
         response.add(linkTo(methodOn(UserController.class).searchUser(id)).withSelfRel());
         response.add(linkTo(methodOn(UserController.class).updateUser(id, null)).withRel(UPDATE_REL));
@@ -146,10 +146,10 @@ public class UserController {
      */
     @ApiOperation("Endpoint to delete a user.")
     @DeleteMapping("/{id}")
-    public ResponseEntity<DeleteUserResponse> deleteUser(
+    public ResponseEntity<DeleteUserResponseDTO> deleteUser(
             @PathVariable String id) throws ServiceException {
         LOGGER.info("Initiating request to delete user with id: {}.", id);
-        final DeleteUserResponse response = userService.deleteUser(id);
+        final DeleteUserResponseDTO response = userService.deleteUser(id);
 
         response.add(linkTo(methodOn(UserController.class).searchUser(id)).withRel("user"));
 
@@ -164,15 +164,15 @@ public class UserController {
      */
     @ApiOperation("Utility endpoint to list all users.")
     @GetMapping("/list")
-    public ResponseEntity<CollectionModel<UserResponse>> listUsers() throws ServiceException {
-        List<UserResponse> users = userService.findAllUsers();
+    public ResponseEntity<CollectionModel<UserResponseDTO>> listUsers() throws ServiceException {
+        List<UserResponseDTO> users = userService.findAllUsers();
         users.forEach(user -> user
                 .add(linkTo(methodOn(UserController.class).searchUser(user.getId().toString()))
                         .withSelfRel())
                 .add(linkTo(methodOn(UserController.class).updateUser(user.getId().toString(), null))
                         .withRel(UPDATE_REL))
                 .add(linkTo(methodOn(UserController.class).deleteUser(user.getId().toString())).withRel(DELETE_REL)));
-        CollectionModel<UserResponse> collection = CollectionModel.of(users);
+        CollectionModel<UserResponseDTO> collection = CollectionModel.of(users);
         collection.add(linkTo(methodOn(UserController.class).listUsers()).withSelfRel());
         collection.add(linkTo(methodOn(UserController.class).createUser(null)).withRel("create"));
         return ResponseEntity.ok(collection);

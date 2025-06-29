@@ -4,11 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import com.example.usersdemo.dto.auth.LoginRequestDTO;
+
 public class LoginRequestTest {
 
     @Test
     void testGettersAndSetters() {
-        LoginRequest request = new LoginRequest();
+        LoginRequestDTO request = new LoginRequestDTO();
         request.setEmail("test@mail.com");
         request.setPassword("secret");
 

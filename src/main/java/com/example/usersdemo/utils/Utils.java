@@ -15,10 +15,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.example.usersdemo.config.AppConfig;
+import com.example.usersdemo.dto.phone.PhoneRequestDTO;
 import com.example.usersdemo.exception.ServiceException;
 import com.example.usersdemo.models.entity.User;
 import com.example.usersdemo.models.repository.UserRepository;
-import com.example.usersdemo.request.user.PhoneRequest;
 
 @Component
 public class Utils {
@@ -44,12 +44,12 @@ public class Utils {
         }
     }
 
-    public void phoneListValidator(List<PhoneRequest> phones) {
+    public void phoneListValidator(List<PhoneRequestDTO> phones) {
         if (phones == null || phones.isEmpty()) {
             throw new ServiceException("400", "At least one phone number must be provided.");
         }
         Set<String> numbers = new HashSet<>();
-        for (PhoneRequest phone : phones) {
+        for (PhoneRequestDTO phone : phones) {
             if (!numbers.add(phone.getNumber())) {
                 throw new ServiceException("400", "Duplicate phone numbers are not allowed for the user.");
             }

@@ -24,18 +24,18 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.example.usersdemo.dto.phone.PhoneRequestDTO;
+import com.example.usersdemo.dto.user.ChangeUserStatusRequestDTO;
+import com.example.usersdemo.dto.user.ChangeUserStatusResponseDTO;
+import com.example.usersdemo.dto.user.DeleteUserResponseDTO;
+import com.example.usersdemo.dto.user.RegisterUserResponseDTO;
+import com.example.usersdemo.dto.user.UpdateUserRequestDTO;
+import com.example.usersdemo.dto.user.UpdateUserResponseDTO;
+import com.example.usersdemo.dto.user.UserRequestDTO;
+import com.example.usersdemo.dto.user.UserResponseDTO;
 import com.example.usersdemo.exception.ServiceException;
 import com.example.usersdemo.models.entity.User;
 import com.example.usersdemo.models.repository.UserRepository;
-import com.example.usersdemo.request.user.ChangeUserStatusRequest;
-import com.example.usersdemo.request.user.PhoneRequest;
-import com.example.usersdemo.request.user.UpdateUserRequest;
-import com.example.usersdemo.request.user.UserRequest;
-import com.example.usersdemo.response.user.ChangeUserStatusResponse;
-import com.example.usersdemo.response.user.DeleteUserResponse;
-import com.example.usersdemo.response.user.RegisterUserResponse;
-import com.example.usersdemo.response.user.UpdateUserResponse;
-import com.example.usersdemo.response.user.UserResponse;
 import com.example.usersdemo.utils.JwtUtil;
 import com.example.usersdemo.utils.MessageUtils;
 import com.example.usersdemo.utils.Utils;
@@ -87,7 +87,7 @@ public class UserServiceImplTest {
 
         when(utils.findUser(testUuid.toString())).thenReturn(user);
 
-        UserResponse result = userService.searchUser(testUuid.toString());
+        UserResponseDTO result = userService.searchUser(testUuid.toString());
 
         assertNotNull(result);
         assertEquals(testUuid, result.getId());
@@ -112,14 +112,14 @@ public class UserServiceImplTest {
     @Test
     void createUser_userCreated() {
 
-        List<PhoneRequest> phones = new ArrayList<>();
-        PhoneRequest phoneRequest = new PhoneRequest();
+        List<PhoneRequestDTO> phones = new ArrayList<>();
+        PhoneRequestDTO phoneRequest = new PhoneRequestDTO();
         phoneRequest.setNumber("12345678");
         phoneRequest.setCityCode("1");
         phoneRequest.setCountryCode("56");
         phones.add(phoneRequest);
 
-        UserRequest request = UserRequest.builder()
+        UserRequestDTO request = UserRequestDTO.builder()
                 .email("new_email@gmail.cl")
                 .password("Pass123")
                 .name("new user")
@@ -142,7 +142,7 @@ public class UserServiceImplTest {
 
         when(userRepo.save(any(User.class))).thenReturn(savedUser);
 
-        RegisterUserResponse result = userService.createUser(request);
+        RegisterUserResponseDTO result = userService.createUser(request);
 
         assertNotNull(result);
         assertNotNull(result.getId());
@@ -166,7 +166,7 @@ public class UserServiceImplTest {
         user.setToken("token");
         user.setIsActive(true);
 
-        UpdateUserRequest request = new UpdateUserRequest();
+        UpdateUserRequestDTO request = new UpdateUserRequestDTO();
         request.setEmail("test@gmail.cl");
         request.setName("new name");
         request.setPassword("newpass");
@@ -176,7 +176,7 @@ public class UserServiceImplTest {
         when(userRepo.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
         when(passwordEncoder.encode("newpass")).thenReturn("hashedNewPass");
 
-        UpdateUserResponse response = userService.updateUser(testUuid.toString(), request);
+        UpdateUserResponseDTO response = userService.updateUser(testUuid.toString(), request);
 
         assertNotNull(response);
         assertEquals(testUuid, response.getId());
@@ -199,10 +199,10 @@ public class UserServiceImplTest {
         when(utils.findUser(testUuid.toString())).thenReturn(user);
         when(userRepo.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        ChangeUserStatusRequest request = new ChangeUserStatusRequest();
+        ChangeUserStatusRequestDTO request = new ChangeUserStatusRequestDTO();
         request.setActive(true);
 
-        ChangeUserStatusResponse response = userService.changeUserStatus(testUuid.toString(), request);
+        ChangeUserStatusResponseDTO response = userService.changeUserStatus(testUuid.toString(), request);
 
         assertNotNull(response);
         assertEquals(testUuid, response.getId());
@@ -222,7 +222,7 @@ public class UserServiceImplTest {
 
         when(utils.findUser(testUuid.toString())).thenReturn(user);
 
-        DeleteUserResponse response = userService.deleteUser(testUuid.toString());
+        DeleteUserResponseDTO response = userService.deleteUser(testUuid.toString());
 
         verify(userRepo, times(1)).save(user);
         verify(userRepo, times(1)).deleteById(testUuid);

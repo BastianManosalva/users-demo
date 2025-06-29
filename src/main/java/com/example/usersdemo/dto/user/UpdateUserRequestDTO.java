@@ -1,9 +1,11 @@
-package com.example.usersdemo.request.user;
+package com.example.usersdemo.dto.user;
 
 import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+
+import com.example.usersdemo.dto.phone.PhoneRequestDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,9 +16,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRequest {
+public class UpdateUserRequestDTO {
 
-    @javax.validation.constraints.Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$", message = "The name must contain only letters and spaces.")
     @NotBlank(message = "The name is mandatory.")
     private String name;
 
@@ -26,6 +27,6 @@ public class UserRequest {
     @NotBlank(message = "The password is mandatory.")
     private String password;
 
-    private List<@Valid PhoneRequest> phones;
+    private List<@Valid PhoneRequestDTO> phones;
 
 }

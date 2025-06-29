@@ -19,14 +19,14 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.example.usersdemo.request.user.ChangeUserStatusRequest;
-import com.example.usersdemo.request.user.UpdateUserRequest;
-import com.example.usersdemo.request.user.UserRequest;
-import com.example.usersdemo.response.user.ChangeUserStatusResponse;
-import com.example.usersdemo.response.user.DeleteUserResponse;
-import com.example.usersdemo.response.user.RegisterUserResponse;
-import com.example.usersdemo.response.user.UpdateUserResponse;
-import com.example.usersdemo.response.user.UserResponse;
+import com.example.usersdemo.dto.user.ChangeUserStatusRequestDTO;
+import com.example.usersdemo.dto.user.ChangeUserStatusResponseDTO;
+import com.example.usersdemo.dto.user.DeleteUserResponseDTO;
+import com.example.usersdemo.dto.user.RegisterUserResponseDTO;
+import com.example.usersdemo.dto.user.UpdateUserRequestDTO;
+import com.example.usersdemo.dto.user.UpdateUserResponseDTO;
+import com.example.usersdemo.dto.user.UserRequestDTO;
+import com.example.usersdemo.dto.user.UserResponseDTO;
 import com.example.usersdemo.service.UserService;
 
 public class UserControllerTest {
@@ -47,12 +47,12 @@ public class UserControllerTest {
 
     @Test
     void createUser_userCreated() {
-        UserRequest request = UserRequest.builder().email("test@gmail.cl").password("pass").name("name").build();
-        RegisterUserResponse response = new RegisterUserResponse();
+        UserRequestDTO request = UserRequestDTO.builder().email("test@gmail.cl").password("pass").name("name").build();
+        RegisterUserResponseDTO response = new RegisterUserResponseDTO();
         response.setId(testUuid);
-        when(userService.createUser(any(UserRequest.class))).thenReturn(response);
+        when(userService.createUser(any(UserRequestDTO.class))).thenReturn(response);
 
-        ResponseEntity<RegisterUserResponse> result = userController.createUser(request);
+        ResponseEntity<RegisterUserResponseDTO> result = userController.createUser(request);
 
         assertEquals(HttpStatus.CREATED, result.getStatusCode());
         assertEquals(testUuid, result.getBody().getId());
@@ -61,11 +61,11 @@ public class UserControllerTest {
 
     @Test
     void findUser_userFound() {
-        UserResponse user = new UserResponse();
+        UserResponseDTO user = new UserResponseDTO();
         user.setId(testUuid);
         when(userService.searchUser(testUuid.toString())).thenReturn(user);
 
-        ResponseEntity<UserResponse> result = userController.searchUser(testUuid.toString());
+        ResponseEntity<UserResponseDTO> result = userController.searchUser(testUuid.toString());
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals(testUuid, result.getBody().getId());
@@ -74,12 +74,12 @@ public class UserControllerTest {
 
     @Test
     void updateUser_updatedUser() {
-        UpdateUserRequest request = new UpdateUserRequest();
-        UpdateUserResponse response = new UpdateUserResponse();
+        UpdateUserRequestDTO request = new UpdateUserRequestDTO();
+        UpdateUserResponseDTO response = new UpdateUserResponseDTO();
         response.setId(testUuid);
-        when(userService.updateUser(eq(testUuid.toString()), any(UpdateUserRequest.class))).thenReturn(response);
+        when(userService.updateUser(eq(testUuid.toString()), any(UpdateUserRequestDTO.class))).thenReturn(response);
 
-        ResponseEntity<UpdateUserResponse> result = userController.updateUser(testUuid.toString(), request);
+        ResponseEntity<UpdateUserResponseDTO> result = userController.updateUser(testUuid.toString(), request);
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals(testUuid, result.getBody().getId());
@@ -88,13 +88,14 @@ public class UserControllerTest {
 
     @Test
     void changeUserStatus_userStatusChanged() {
-        ChangeUserStatusRequest request = new ChangeUserStatusRequest();
-        ChangeUserStatusResponse response = new ChangeUserStatusResponse();
+        ChangeUserStatusRequestDTO request = new ChangeUserStatusRequestDTO();
+        ChangeUserStatusResponseDTO response = new ChangeUserStatusResponseDTO();
         response.setId(testUuid);
-        when(userService.changeUserStatus(eq(testUuid.toString()), any(ChangeUserStatusRequest.class)))
+        when(userService.changeUserStatus(eq(testUuid.toString()), any(ChangeUserStatusRequestDTO.class)))
                 .thenReturn(response);
 
-        ResponseEntity<ChangeUserStatusResponse> result = userController.changeUserStatus(testUuid.toString(), request);
+        ResponseEntity<ChangeUserStatusResponseDTO> result = userController.changeUserStatus(testUuid.toString(),
+                request);
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals(testUuid, result.getBody().getId());
@@ -103,11 +104,11 @@ public class UserControllerTest {
 
     @Test
     void deleteUser_userDeleted() {
-        DeleteUserResponse response = new DeleteUserResponse();
+        DeleteUserResponseDTO response = new DeleteUserResponseDTO();
         response.setId(testUuid);
         when(userService.deleteUser(testUuid.toString())).thenReturn(response);
 
-        ResponseEntity<DeleteUserResponse> result = userController.deleteUser(testUuid.toString());
+        ResponseEntity<DeleteUserResponseDTO> result = userController.deleteUser(testUuid.toString());
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals(testUuid, result.getBody().getId());
@@ -116,13 +117,13 @@ public class UserControllerTest {
 
     @Test
     void listUsers_returnsUserList() {
-        UserResponse user = new UserResponse();
+        UserResponseDTO user = new UserResponseDTO();
         user.setId(testUuid);
         when(userService.findAllUsers()).thenReturn(Collections.singletonList(user));
 
-        ResponseEntity<CollectionModel<UserResponse>> result = userController.listUsers();
+        ResponseEntity<CollectionModel<UserResponseDTO>> result = userController.listUsers();
 
-        List<UserResponse> users = result.getBody().getContent().stream().collect(Collectors.toList());
+        List<UserResponseDTO> users = result.getBody().getContent().stream().collect(Collectors.toList());
         assertEquals(1, users.size());
         assertEquals(testUuid, users.get(0).getId());
         verify(userService, times(1)).findAllUsers();

@@ -1,4 +1,4 @@
-package com.example.usersdemo.request.user;
+package com.example.usersdemo.dto.user;
 
 import javax.validation.constraints.NotBlank;
 
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChangeUserStatusRequest {
+public class ChangeUserStatusRequestDTO {
 
     @NotBlank(message = "The user status is mandatory.")
     private boolean isActive;
