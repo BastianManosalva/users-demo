@@ -1,9 +1,9 @@
-package com.example.usersdemo.response.user;
+package com.example.usersdemo.dto.phone;
 
 import lombok.Data;
 
 @Data
-public class PhoneResponse {
+public class PhoneResponseDTO {
 
     private String number;
     private String cityCode;

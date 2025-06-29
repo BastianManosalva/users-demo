@@ -8,26 +8,25 @@ import java.util.stream.StreamSupport;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.usersdemo.dto.phone.PhoneRequestDTO;
+import com.example.usersdemo.dto.user.ChangeUserStatusRequestDTO;
+import com.example.usersdemo.dto.user.ChangeUserStatusResponseDTO;
+import com.example.usersdemo.dto.user.DeleteUserResponseDTO;
+import com.example.usersdemo.dto.user.RegisterUserResponseDTO;
+import com.example.usersdemo.dto.user.UpdateUserRequestDTO;
+import com.example.usersdemo.dto.user.UpdateUserResponseDTO;
+import com.example.usersdemo.dto.user.UserRequestDTO;
+import com.example.usersdemo.dto.user.UserResponseDTO;
 import com.example.usersdemo.exception.ServiceException;
 import com.example.usersdemo.mapper.UserMapper;
 import com.example.usersdemo.models.entity.Phone;
 import com.example.usersdemo.models.entity.User;
 import com.example.usersdemo.models.repository.UserRepository;
-import com.example.usersdemo.request.user.ChangeUserStatusRequest;
-import com.example.usersdemo.request.user.PhoneRequest;
-import com.example.usersdemo.request.user.UpdateUserRequest;
-import com.example.usersdemo.request.user.UserRequest;
-import com.example.usersdemo.response.user.ChangeUserStatusResponse;
-import com.example.usersdemo.response.user.DeleteUserResponse;
-import com.example.usersdemo.response.user.RegisterUserResponse;
-import com.example.usersdemo.response.user.UpdateUserResponse;
-import com.example.usersdemo.response.user.UserResponse;
 import com.example.usersdemo.service.UserService;
 import com.example.usersdemo.utils.JwtUtil;
 import com.example.usersdemo.utils.MessageUtils;
@@ -39,9 +38,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserMapper userMapper;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private final Utils utils;
@@ -50,15 +46,17 @@ public class UserServiceImpl implements UserService {
     private final JwtUtil jwtUtil;
 
     @Override
-    public UserResponse searchUser(String id) {
+    public UserResponseDTO searchUser(String id) {
+        LOGGER.info("Searching user with id: {}", id);
         User user = utils.findUser(id);
-        return userMapper.toUserResponse(user);
+        LOGGER.info("User found: {}", user != null ? user.getEmail() : "not found");
+        return UserMapper.toUserResponse(user);
     }
 
     @Override
     @Transactional
-    public RegisterUserResponse createUser(final UserRequest request) {
-
+    public RegisterUserResponseDTO createUser(final UserRequestDTO request) {
+        LOGGER.info("Creating user with email: {}", request.getEmail());
         utils.emailValidator(request.getEmail());
         utils.passwordValidator(request.getPassword());
         utils.existingEmailValidator(request.getEmail());
@@ -66,33 +64,18 @@ public class UserServiceImpl implements UserService {
 
         Date date = new Date();
 
-        final var user = new User();
-
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
+        User user = UserMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setIsActive(true);
         user.setCreatedAt(date);
         user.setModified(date);
         user.setLastLogin(date);
-
-        List<Phone> phones = request.getPhones().stream()
-                .map(phoneReq -> {
-                    Phone phone = new Phone();
-                    phone.setNumber(phoneReq.getNumber());
-                    phone.setCityCode(phoneReq.getCityCode());
-                    phone.setCountryCode(phoneReq.getCountryCode());
-                    phone.setUser(user);
-                    return phone;
-                })
-                .collect(Collectors.toList());
-
-        user.setPhones(phones);
         user.setToken(jwtUtil.generateToken(user.getEmail()));
 
         final var createdUser = userRepo.save(user);
+        LOGGER.info("User created successfully with id: {}", createdUser.getId());
 
-        return RegisterUserResponse.builder()
+        return RegisterUserResponseDTO.builder()
                 .id(createdUser.getId())
                 .isActive(createdUser.getIsActive())
                 .created(createdUser.getCreatedAt())
@@ -105,7 +88,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UpdateUserResponse updateUser(final String id, final UpdateUserRequest request) {
+    public UpdateUserResponseDTO updateUser(final String id, final UpdateUserRequestDTO request) {
+        LOGGER.info("Updating user with id: {}", id);
         final var user = utils.findUser(id);
         utils.emailValidator(request.getEmail());
         utils.existingEmailValidator(request.getEmail());
@@ -117,12 +101,12 @@ public class UserServiceImpl implements UserService {
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setModified(new Date());
-
         updatePhones(user, request.getPhones());
 
         final var updatedUser = userRepo.save(user);
+        LOGGER.info("User updated with id: {}", updatedUser.getId());
 
-        UpdateUserResponse response = new UpdateUserResponse();
+        UpdateUserResponseDTO response = new UpdateUserResponseDTO();
         response.setId(updatedUser.getId());
         response.setCreated(updatedUser.getCreatedAt());
         response.setModified(updatedUser.getModified());
@@ -136,16 +120,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public ChangeUserStatusResponse changeUserStatus(String id, ChangeUserStatusRequest request) {
-
+    public ChangeUserStatusResponseDTO changeUserStatus(String id, ChangeUserStatusRequestDTO request) {
+        LOGGER.info("Changing status for user with id: {} to active: {}", id, request.isActive());
         final var user = utils.findUser(id);
 
         if (request.isActive() && user.getIsActive()) {
+            LOGGER.warn("User {} is already active", id);
             throw new ServiceException(String.valueOf(HttpStatus.BAD_REQUEST.value()),
                     MessageUtils.USER_ALREADY_ACTIVE);
         }
 
         if (!request.isActive() && !user.getIsActive()) {
+            LOGGER.warn("User {} is already inactive", id);
             throw new ServiceException(String.valueOf(HttpStatus.BAD_REQUEST.value()),
                     MessageUtils.USER_ALREADY_INACTIVE);
         }
@@ -154,18 +140,18 @@ public class UserServiceImpl implements UserService {
         user.setModified(new Date());
 
         final var updatedUser = userRepo.save(user);
+        LOGGER.info("User status changed for id: {} to active: {}", id, updatedUser.getIsActive());
 
-        var response = new ChangeUserStatusResponse();
+        var response = new ChangeUserStatusResponseDTO();
         response.setId(updatedUser.getId());
         response.setActive(updatedUser.getIsActive());
         return response;
-
     }
 
     @Override
     @Transactional
-    public DeleteUserResponse deleteUser(String id) {
-
+    public DeleteUserResponseDTO deleteUser(String id) {
+        LOGGER.info("Deleting user with id: {}", id);
         final var user = utils.findUser(id);
 
         user.getPhones().clear();
@@ -173,18 +159,18 @@ public class UserServiceImpl implements UserService {
 
         userRepo.deleteById(UUID.fromString(id));
 
-        final var deletedUser = new DeleteUserResponse();
+        final var deletedUser = new DeleteUserResponseDTO();
         deletedUser.setId(user.getId());
         deletedUser.setName(user.getName());
         deletedUser.setDeletionDate(new Date());
         deletedUser.setMessage(MessageUtils.DELETE_USER_MESSAGE);
-
+        LOGGER.info("User deleted with id: {}", id);
         return deletedUser;
-
     }
 
     @Override
-    public List<UserResponse> findAllUsers() {
+    public List<UserResponseDTO> findAllUsers() {
+        LOGGER.info("Listing all users");
         Iterable<User> users = userRepo.findAll();
         return StreamSupport.stream(users.spliterator(), false)
                 .map(UserMapper::toUserResponse)
@@ -197,7 +183,7 @@ public class UserServiceImpl implements UserService {
      * @param user          {@link User}
      * @param phoneRequests {@link List<PhoneRequest>}
      */
-    private void updatePhones(User user, List<PhoneRequest> phoneRequests) {
+    private void updatePhones(User user, List<PhoneRequestDTO> phoneRequests) {
         List<Phone> currentPhones = user.getPhones();
         List<Phone> newPhones = phoneRequests.stream()
                 .map(phoneReq -> {

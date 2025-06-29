@@ -1,5 +1,6 @@
-package com.example.usersdemo.response.user;
+package com.example.usersdemo.dto.user;
 
+import java.util.Date;
 import java.util.UUID;
 
 import org.springframework.hateoas.RepresentationModel;
@@ -13,9 +14,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChangeUserStatusResponse extends RepresentationModel<ChangeUserStatusResponse> {
+public class DeleteUserResponseDTO extends RepresentationModel<DeleteUserResponseDTO> {
 
     private UUID id;
-    private boolean isActive;
+    private String name;
+    private Date deletionDate;
+    private String message;
 
 }

@@ -1,7 +1,6 @@
-package com.example.usersdemo.response.user;
+package com.example.usersdemo.dto.user;
 
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.hateoas.RepresentationModel;
@@ -15,15 +14,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateUserResponse extends RepresentationModel<UpdateUserResponse> {
+public class RegisterUserResponseDTO extends RepresentationModel<RegisterUserResponseDTO> {
 
-    private String message;
     private UUID id;
     private Date created;
     private Date modified;
     private Date lastLogin;
     private String token;
     private Boolean isActive;
-    private List<PhoneResponse> phones;
 
 }

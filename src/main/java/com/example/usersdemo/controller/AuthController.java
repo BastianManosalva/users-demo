@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.usersdemo.request.auth.LoginRequest;
-import com.example.usersdemo.response.auth.LoginResponse;
+import com.example.usersdemo.dto.auth.LoginRequestDTO;
+import com.example.usersdemo.dto.auth.LoginResponseDTO;
 import com.example.usersdemo.service.AuthService;
 
 import io.swagger.annotations.ApiOperation;
@@ -27,9 +27,9 @@ public class AuthController {
 
     @ApiOperation("Endpoint to login.")
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO request) {
         LOGGER.info("Initiating login service.");
-        final LoginResponse response = authService.login(request);
+        final LoginResponseDTO response = authService.login(request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

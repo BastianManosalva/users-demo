@@ -17,6 +17,7 @@ public class ExceptionController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionController.class);
 
     /**
+     * Handles ServiceException and returns a ResponseEntity with the appropriate
      * 
      * @param ServiceException {@link ServiceException}
      * @param WebRequest       {@link WebRequest}
@@ -29,6 +30,7 @@ public class ExceptionController {
     }
 
     /**
+     * Builds a ResponseEntity with the given status and message.
      * 
      * @param status  {@link HttpStatus}
      * @param message {@link String}
@@ -40,6 +42,7 @@ public class ExceptionController {
     }
 
     /**
+     * Handles MethodArgumentNotValidException and returns a ResponseEntity
      * 
      * @param ex {@link MethodArgumentNotValidException}
      * @return ResponseEntity<?>
@@ -55,6 +58,12 @@ public class ExceptionController {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Handles all other exceptions that are not specifically handled.
+     * 
+     * @param ex {@link Exception}
+     * @return ResponseEntity<ErrorResponse>
+     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
         ErrorResponse error = new ErrorResponse(

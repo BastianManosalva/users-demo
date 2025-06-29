@@ -1,10 +1,12 @@
-package com.example.usersdemo.response.user;
+package com.example.usersdemo.dto.user;
 
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.hateoas.RepresentationModel;
+
+import com.example.usersdemo.dto.phone.PhoneResponseDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,12 +17,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserResponse extends RepresentationModel<UserResponse> {
+public class UserResponseDTO extends RepresentationModel<UserResponseDTO> {
 
     private UUID id;
     private String name;
     private String email;
-    private List<PhoneResponse> phones;
+    private List<PhoneResponseDTO> phones;
     private boolean isActive;
     private Date createdAt;
     private Date modified;

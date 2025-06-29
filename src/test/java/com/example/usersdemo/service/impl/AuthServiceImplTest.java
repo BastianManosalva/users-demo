@@ -12,10 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.example.usersdemo.dto.auth.LoginRequestDTO;
 import com.example.usersdemo.exception.ServiceException;
 import com.example.usersdemo.models.entity.User;
 import com.example.usersdemo.models.repository.UserRepository;
-import com.example.usersdemo.request.auth.LoginRequest;
 import com.example.usersdemo.utils.JwtUtil;
 import com.example.usersdemo.utils.MessageUtils;
 
@@ -41,7 +41,7 @@ public class AuthServiceImplTest {
 
     @Test
     void login_userNotFoundExcepcion() {
-        LoginRequest request = new LoginRequest();
+        LoginRequestDTO request = new LoginRequestDTO();
         request.setEmail("not_valid_email@gmail.cl");
         request.setPassword("password");
 
@@ -54,7 +54,7 @@ public class AuthServiceImplTest {
 
     @Test
     void login_passwordExcepcion() {
-        LoginRequest request = new LoginRequest();
+        LoginRequestDTO request = new LoginRequestDTO();
         request.setEmail("test@gmail.cl");
         request.setPassword("bad_password");
 
@@ -74,7 +74,7 @@ public class AuthServiceImplTest {
 
     @Test
     void login_userStaturExcepcion() {
-        LoginRequest request = new LoginRequest();
+        LoginRequestDTO request = new LoginRequestDTO();
         request.setEmail("test@gmail.cl");
         request.setPassword("password");
 

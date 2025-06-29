@@ -1,16 +1,17 @@
 package com.example.usersdemo.service;
 
-import com.example.usersdemo.request.auth.LoginRequest;
-import com.example.usersdemo.response.auth.LoginResponse;
+import com.example.usersdemo.dto.auth.LoginRequestDTO;
+import com.example.usersdemo.dto.auth.LoginResponseDTO;
+import com.example.usersdemo.exception.ServiceException;
 
 public interface AuthService {
 
     /**
      * Authenticates an user.
      *
-     * @param request {@link LoginRequest}
-     * @return {@link LoginResponse}
+     * @param request {@link LoginRequestDTO}
+     * @return {@link LoginResponseDTO}
      */
-    public LoginResponse login(LoginRequest request);
+    LoginResponseDTO login(LoginRequestDTO request) throws ServiceException;
 
 }

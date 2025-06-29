@@ -1,4 +1,4 @@
-package com.example.usersdemo.request.auth;
+package com.example.usersdemo.dto.auth;
 
 import javax.validation.constraints.NotBlank;
 
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequest {
+public class LoginRequestDTO {
 
     @NotBlank(message = "The email is mandatory.")
     private String email;

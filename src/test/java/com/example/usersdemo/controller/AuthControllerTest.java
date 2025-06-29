@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.example.usersdemo.request.auth.LoginRequest;
-import com.example.usersdemo.response.auth.LoginResponse;
+import com.example.usersdemo.dto.auth.LoginRequestDTO;
+import com.example.usersdemo.dto.auth.LoginResponseDTO;
 import com.example.usersdemo.service.AuthService;
 
 public class AuthControllerTest {
@@ -31,17 +31,17 @@ public class AuthControllerTest {
     @Test
     void login_retornaLoginResponseOK() {
 
-        LoginRequest request = new LoginRequest();
+        LoginRequestDTO request = new LoginRequestDTO();
         request.setEmail("test@gmail.cl");
         request.setPassword("secretPass");
 
-        LoginResponse mockResponse = new LoginResponse();
+        LoginResponseDTO mockResponse = new LoginResponseDTO();
         mockResponse.setToken("token");
         mockResponse.setActive(true);
 
-        when(authService.login(any(LoginRequest.class))).thenReturn(mockResponse);
+        when(authService.login(any(LoginRequestDTO.class))).thenReturn(mockResponse);
 
-        ResponseEntity<LoginResponse> responseEntity = authController.login(request);
+        ResponseEntity<LoginResponseDTO> responseEntity = authController.login(request);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());

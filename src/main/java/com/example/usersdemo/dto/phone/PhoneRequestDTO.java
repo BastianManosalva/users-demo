@@ -1,4 +1,4 @@
-package com.example.usersdemo.request.user;
+package com.example.usersdemo.dto.phone;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -6,7 +6,7 @@ import javax.validation.constraints.Pattern;
 import lombok.Data;
 
 @Data
-public class PhoneRequest {
+public class PhoneRequestDTO {
 
     @NotBlank(message = "Phone number is mandatory.")
     @Pattern(regexp = "^\\d{9}$", message = "Phone number must be 9 digits.")
